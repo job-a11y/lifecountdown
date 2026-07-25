@@ -82,8 +82,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
       { name: "apple-mobile-web-app-title", content: "CountDown" },
-      { title: "CountDown" },
-      { name: "description", content: "Elegant countdowns for every moment that matters." },
+      { title: "CountDown — Elegant timers, synced everywhere" },
+      { name: "description", content: "Create beautiful countdowns for the moments that matter. Real-time sync across every device." },
+      { property: "og:title", content: "CountDown — Elegant timers, synced everywhere" },
+      { name: "twitter:title", content: "CountDown — Elegant timers, synced everywhere" },
+      { property: "og:description", content: "Create beautiful countdowns for the moments that matter. Real-time sync across every device." },
+      { name: "twitter:description", content: "Create beautiful countdowns for the moments that matter. Real-time sync across every device." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/44f93c44-9833-40ba-8e5a-e279c9962a8f" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/44f93c44-9833-40ba-8e5a-e279c9962a8f" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:type", content: "website" },
     ],
     links: [
       {

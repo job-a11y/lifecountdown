@@ -12,8 +12,8 @@ export const Route = createFileRoute("/")({
     meta: [
       { title: "CountDown — Elegant timers, synced everywhere" },
       { name: "description", content: "Create beautiful countdowns for the moments that matter. Real-time sync across every device." },
-      { property: "og:title", content: "CountDown" },
-      { property: "og:description", content: "Elegant countdowns for every moment that matters." },
+      { property: "og:title", content: "CountDown — Elegant timers, synced everywhere" },
+      { property: "og:description", content: "Create beautiful countdowns for the moments that matter. Real-time sync across every device." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
