@@ -1,0 +1,113 @@
+import { motion } from "framer-motion";
+import { MoreHorizontal, Pencil, Trash2, Maximize2 } from "lucide-react";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { type Countdown, type TimeParts, formatTarget, getAccent, pad } from "@/lib/countdown-utils";
+
+interface Props {
+  cd: Countdown;
+  parts: TimeParts;
+  view: "grid" | "list";
+  pulsing: boolean;
+  onOpen: () => void;
+  onEdit: () => void;
+  onDelete: () => void;
+  onDismissPulse: () => void;
+}
+
+export function CountdownCard({ cd, parts, view, pulsing, onOpen, onEdit, onDelete, onDismissPulse }: Props) {
+  const accent = getAccent(cd.accent);
+
+  return (
+    <motion.div
+      layoutId={`card-${cd.id}`}
+      onClick={() => (pulsing ? onDismissPulse() : onOpen())}
+      whileHover={{ y: -2 }}
+      transition={{ type: "spring", stiffness: 300, damping: 26 }}
+      className={
+        "group relative cursor-pointer overflow-hidden rounded-3xl border bg-white/5 backdrop-blur-xl transition-shadow " +
+        (view === "list" ? "p-7 sm:p-8" : "p-6") +
+        (pulsing ? " animate-pulse" : "")
+      }
+      style={{
+        borderColor: `rgba(${accent.rgb}, 0.35)`,
+        boxShadow: `0 0 0 1px rgba(${accent.rgb}, 0.15), 0 20px 60px -30px rgba(${accent.rgb}, 0.5)`,
+      }}
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full blur-3xl opacity-40"
+        style={{ background: `radial-gradient(closest-side, rgba(${accent.rgb}, 0.7), transparent)` }}
+      />
+
+      <motion.div layoutId={`header-${cd.id}`} className="relative flex items-start justify-between gap-3 mb-4">
+        <div className="min-w-0 flex-1">
+          <h3 className="truncate text-lg font-semibold text-zinc-100">{cd.title}</h3>
+          <p className="mt-1 text-xs text-zinc-400">Target: {formatTarget(cd.target_at)}</p>
+        </div>
+        <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+          <button
+            onClick={onOpen}
+            className="rounded-full p-2 text-zinc-400 hover:bg-white/5 hover:text-zinc-100 transition"
+            aria-label="Fullscreen"
+          >
+            <Maximize2 className="h-4 w-4" />
+          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="rounded-full p-2 text-zinc-400 hover:bg-white/5 hover:text-zinc-100 transition">
+                <MoreHorizontal className="h-4 w-4" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="rounded-xl border-white/10 bg-zinc-900/95 backdrop-blur-xl text-zinc-100">
+              <DropdownMenuItem onClick={onEdit} className="gap-2 focus:bg-white/10">
+                <Pencil className="h-4 w-4" /> Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={onDelete} className="gap-2 text-red-400 focus:bg-red-500/10 focus:text-red-300">
+                <Trash2 className="h-4 w-4" /> Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </motion.div>
+
+      {parts.reached ? (
+        <motion.div layoutId={`digits-${cd.id}`} className="relative">
+          <div
+            className={"font-semibold tracking-tight " + (view === "list" ? "text-5xl sm:text-6xl" : "text-4xl")}
+            style={{ color: accent.hex }}
+          >
+            Event Reached!
+          </div>
+          {pulsing && (
+            <p className="mt-2 text-xs text-zinc-400">Tap card to dismiss glow</p>
+          )}
+        </motion.div>
+      ) : (
+        <motion.div layoutId={`digits-${cd.id}`} className="relative">
+          <div className={"grid grid-cols-4 gap-2 sm:gap-4 " + (view === "list" ? "" : "")}>
+            <Unit label="Days" value={parts.days} big={view === "list"} />
+            <Unit label="Hours" value={parts.hours} big={view === "list"} />
+            <Unit label="Min" value={parts.minutes} big={view === "list"} />
+            <Unit label="Sec" value={parts.seconds} big={view === "list"} />
+          </div>
+        </motion.div>
+      )}
+    </motion.div>
+  );
+}
+
+function Unit({ label, value, big }: { label: string; value: number; big?: boolean }) {
+  return (
+    <div className="flex flex-col items-center">
+      <div
+        className={
+          "font-semibold tabular-nums tracking-tight text-zinc-50 " +
+          (big ? "text-5xl sm:text-6xl" : "text-3xl sm:text-4xl")
+        }
+      >
+        {pad(value)}
+      </div>
+      <div className="mt-1 text-[10px] uppercase tracking-widest text-zinc-500">{label}</div>
+    </div>
+  );
+}
