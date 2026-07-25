@@ -126,11 +126,11 @@ export function Dashboard({ user }: { user: User }) {
   async function handleSubmit(data: { title: string; target_at: string; accent: AccentKey }) {
     if (editing) {
       const { error } = await supabase.from("countdowns").update(data).eq("id", editing.id);
-      if (error) return toast.error(error.message);
+      if (error) { toast.error(error.message); return; }
       toast.success("Updated");
     } else {
       const { error } = await supabase.from("countdowns").insert({ ...data, user_id: user.id });
-      if (error) return toast.error(error.message);
+      if (error) { toast.error(error.message); return; }
       toast.success("Countdown added");
     }
     setEditing(null);
