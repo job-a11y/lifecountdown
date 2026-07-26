@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Plus, Grid2x2, List, LogOut, Bell, BellOff, Loader2 } from "lucide-react";
+import { Plus, Grid2x2, List, LogOut, Bell, BellOff, Loader2, User as UserIcon } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,14 @@ import {
 import { CountdownCard } from "./CountdownCard";
 import { AddEditDialog } from "./AddEditDialog";
 import { FullscreenView } from "./FullscreenView";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export function Dashboard({ user }: { user: User }) {
   const [countdowns, setCountdowns] = useState<Countdown[]>([]);
@@ -149,23 +157,22 @@ export function Dashboard({ user }: { user: User }) {
   }
 
   return (
-    <div className="relative min-h-dvh bg-zinc-950 text-zinc-100">
+    <div className="relative min-h-dvh w-full overflow-x-hidden bg-zinc-950 text-zinc-100">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-96 opacity-30"
         style={{ background: "radial-gradient(60% 100% at 50% 0%, rgba(10,132,255,0.25), transparent)" }} />
 
-      <header className="relative mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 pt-8 pb-6 sm:px-8">
-        <div>
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight">Countdowns</h1>
-          <p className="mt-1 text-sm text-zinc-400">{user.email}</p>
-        </div>
+      <header className="relative mx-auto flex w-full max-w-6xl items-center justify-between gap-2 px-4 pt-6 pb-5 sm:px-8 sm:pt-8 sm:pb-6">
+        <h1 className="min-w-0 truncate text-2xl font-semibold tracking-tight sm:text-4xl">
+          Countdowns
+        </h1>
 
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1.5">
           <Tabs value={view} onValueChange={(v) => setView(v as "grid" | "list")}>
-            <TabsList className="rounded-full border border-white/10 bg-white/5 p-1 h-10">
-              <TabsTrigger value="grid" className="rounded-full data-[state=active]:bg-white data-[state=active]:text-black h-8 px-3">
+            <TabsList className="h-10 rounded-full border border-white/10 bg-white/5 p-1">
+              <TabsTrigger value="grid" className="h-8 w-8 rounded-full p-0 data-[state=active]:bg-white data-[state=active]:text-black">
                 <Grid2x2 className="h-4 w-4" />
               </TabsTrigger>
-              <TabsTrigger value="list" className="rounded-full data-[state=active]:bg-white data-[state=active]:text-black h-8 px-3">
+              <TabsTrigger value="list" className="h-8 w-8 rounded-full p-0 data-[state=active]:bg-white data-[state=active]:text-black">
                 <List className="h-4 w-4" />
               </TabsTrigger>
             </TabsList>
@@ -176,7 +183,7 @@ export function Dashboard({ user }: { user: User }) {
             variant="ghost"
             size="icon"
             aria-label="Notifications"
-            className="h-10 w-10 rounded-full border border-white/10 bg-white/5 text-zinc-100 hover:bg-white/10"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-zinc-100 hover:bg-white/10"
             title={notifPerm === "granted" ? "Notifications on" : "Enable notifications"}
           >
             {notifPerm === "granted" ? <Bell className="h-4 w-4" /> : <BellOff className="h-4 w-4" />}
@@ -184,24 +191,39 @@ export function Dashboard({ user }: { user: User }) {
 
           <Button
             onClick={() => { setEditing(null); setDialogOpen(true); }}
-            className="h-10 rounded-full bg-white text-black hover:bg-white/90 pl-3 pr-4 font-medium"
+            aria-label="Add countdown"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-white p-0 font-medium text-black hover:bg-white/90 sm:w-auto sm:px-4"
           >
-            <Plus className="h-4 w-4 mr-1" /> New
+            <Plus className="h-4 w-4 sm:mr-1" />
+            <span className="hidden sm:inline">New</span>
           </Button>
 
-          <Button
-            onClick={() => supabase.auth.signOut()}
-            variant="ghost"
-            size="icon"
-            aria-label="Sign out"
-            className="h-10 w-10 rounded-full text-zinc-400 hover:bg-white/5 hover:text-zinc-100"
-          >
-            <LogOut className="h-4 w-4" />
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Account"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-zinc-100 hover:bg-white/10"
+              >
+                <UserIcon className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="min-w-56">
+              <DropdownMenuLabel className="truncate">{user.email}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => supabase.auth.signOut()}>
+                <LogOut className="mr-2 h-4 w-4" /> Sign out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </header>
 
-      <main className="relative mx-auto max-w-6xl px-5 pb-24 sm:px-8">
+      <main
+        className="relative mx-auto w-full max-w-6xl px-4 pb-24 sm:px-8"
+        style={{ paddingBottom: "calc(6rem + env(safe-area-inset-bottom))" }}
+      >
         {loading ? (
           <div className="flex items-center justify-center py-32 text-zinc-500">
             <Loader2 className="h-6 w-6 animate-spin" />
