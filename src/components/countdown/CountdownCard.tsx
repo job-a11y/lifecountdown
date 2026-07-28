@@ -84,8 +84,8 @@ export function CountdownCard({ cd, parts, view, pulsing, onOpen, onEdit, onDele
         </motion.div>
       ) : (
         <motion.div layoutId={`digits-${cd.id}`} className="relative">
-          <div className={"grid grid-cols-4 gap-2 sm:gap-4 " + (view === "list" ? "" : "")}>
-            <Unit label="Days" value={parts.days} big={view === "list"} />
+          <div className="flex items-center justify-between gap-1 sm:gap-3">
+            <Unit label="Days" value={parts.days} big={view === "list"} days />
             <Unit label="Hours" value={parts.hours} big={view === "list"} />
             <Unit label="Min" value={parts.minutes} big={view === "list"} />
             <Unit label="Sec" value={parts.seconds} big={view === "list"} />
@@ -96,16 +96,23 @@ export function CountdownCard({ cd, parts, view, pulsing, onOpen, onEdit, onDele
   );
 }
 
-function Unit({ label, value, big }: { label: string; value: number; big?: boolean }) {
+function daysSizeClass(value: number, big?: boolean) {
+  const digits = Math.abs(value).toString().length;
+  if (digits >= 4) return big ? "text-3xl sm:text-4xl" : "text-2xl sm:text-3xl";
+  if (digits === 3) return big ? "text-4xl sm:text-5xl" : "text-3xl sm:text-4xl";
+  return big ? "text-5xl sm:text-6xl" : "text-4xl sm:text-5xl";
+}
+
+function Unit({ label, value, big, days }: { label: string; value: number; big?: boolean; days?: boolean }) {
+  const size = days
+    ? daysSizeClass(value, big)
+    : big
+      ? "text-5xl sm:text-6xl"
+      : "text-3xl sm:text-4xl";
   return (
-    <div className="flex flex-col items-center">
-      <div
-        className={
-          "font-semibold tabular-nums tracking-tight text-zinc-50 " +
-          (big ? "text-5xl sm:text-6xl" : "text-3xl sm:text-4xl")
-        }
-      >
-        {pad(value)}
+    <div className="flex min-w-0 flex-1 flex-col items-center text-center">
+      <div className={"font-bold tabular-nums tracking-tight text-zinc-50 " + size}>
+        {days ? value.toLocaleString() : pad(value)}
       </div>
       <div className="mt-1 text-[10px] uppercase tracking-widest text-zinc-500">{label}</div>
     </div>

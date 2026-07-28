@@ -53,8 +53,8 @@ export function FullscreenView({ cd, parts, onClose }: Props) {
               Event Reached!
             </div>
           ) : (
-            <div className="grid grid-cols-4 gap-3 sm:gap-8">
-              <Big label="Days" value={parts.days} />
+            <div className="flex items-center justify-between gap-1 sm:gap-3">
+              <Big label="Days" value={parts.days} days />
               <Big label="Hours" value={parts.hours} />
               <Big label="Minutes" value={parts.minutes} />
               <Big label="Seconds" value={parts.seconds} />
@@ -66,11 +66,19 @@ export function FullscreenView({ cd, parts, onClose }: Props) {
   );
 }
 
-function Big({ label, value }: { label: string; value: number }) {
+function Big({ label, value, days }: { label: string; value: number; days?: boolean }) {
+  const digits = Math.abs(value).toString().length;
+  const size = !days
+    ? "text-[15vw] sm:text-[10vw]"
+    : digits >= 4
+      ? "text-[9vw] sm:text-[6vw]"
+      : digits === 3
+        ? "text-[11vw] sm:text-[7.5vw]"
+        : "text-[15vw] sm:text-[10vw]";
   return (
-    <div className="flex flex-col items-center">
-      <div className="text-[15vw] sm:text-[10vw] leading-none font-semibold tabular-nums tracking-tighter text-zinc-50">
-        {pad(value)}
+    <div className="flex min-w-0 flex-1 flex-col items-center text-center">
+      <div className={"leading-none font-bold tabular-nums tracking-tighter text-zinc-50 " + size}>
+        {days ? value.toLocaleString() : pad(value)}
       </div>
       <div className="mt-3 text-xs sm:text-sm uppercase tracking-widest text-zinc-500">{label}</div>
     </div>
