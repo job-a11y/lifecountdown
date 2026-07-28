@@ -53,11 +53,11 @@ export function FullscreenView({ cd, parts, onClose }: Props) {
               Event Reached!
             </div>
           ) : (
-            <div className="flex items-center justify-between gap-1 sm:gap-3">
-              <Big label="Days" value={parts.days} days />
-              <Big label="Hours" value={parts.hours} />
-              <Big label="Minutes" value={parts.minutes} />
-              <Big label="Seconds" value={parts.seconds} />
+            <div className="flex items-baseline justify-between gap-1 sm:gap-3">
+              <Big label="Days" value={parts.days} size={bigSizeClass(parts.days)} days />
+              <Big label="Hours" value={parts.hours} size={bigSizeClass(parts.days)} />
+              <Big label="Minutes" value={parts.minutes} size={bigSizeClass(parts.days)} />
+              <Big label="Seconds" value={parts.seconds} size={bigSizeClass(parts.days)} />
             </div>
           )}
         </motion.div>
@@ -66,15 +66,14 @@ export function FullscreenView({ cd, parts, onClose }: Props) {
   );
 }
 
-function Big({ label, value, days }: { label: string; value: number; days?: boolean }) {
-  const digits = Math.abs(value).toString().length;
-  const size = !days
-    ? "text-[15vw] sm:text-[10vw]"
-    : digits >= 4
-      ? "text-[9vw] sm:text-[6vw]"
-      : digits === 3
-        ? "text-[11vw] sm:text-[7.5vw]"
-        : "text-[15vw] sm:text-[10vw]";
+function bigSizeClass(days: number) {
+  const digits = Math.abs(days).toString().length;
+  if (digits >= 4) return "text-[9vw] sm:text-[6vw]";
+  if (digits === 3) return "text-[11vw] sm:text-[7.5vw]";
+  return "text-[15vw] sm:text-[10vw]";
+}
+
+function Big({ label, value, size, days }: { label: string; value: number; size: string; days?: boolean }) {
   return (
     <div className="flex min-w-0 flex-1 flex-col items-center text-center">
       <div className={"leading-none font-bold tabular-nums tracking-tighter text-zinc-50 " + size}>

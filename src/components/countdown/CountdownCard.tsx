@@ -84,31 +84,31 @@ export function CountdownCard({ cd, parts, view, pulsing, onOpen, onEdit, onDele
         </motion.div>
       ) : (
         <motion.div layoutId={`digits-${cd.id}`} className="relative">
-          <div className="flex items-center justify-between gap-1 sm:gap-3">
-            <Unit label="Days" value={parts.days} big={view === "list"} days />
-            <Unit label="Hours" value={parts.hours} big={view === "list"} />
-            <Unit label="Min" value={parts.minutes} big={view === "list"} />
-            <Unit label="Sec" value={parts.seconds} big={view === "list"} />
-          </div>
+          {(() => {
+            const size = cardSizeClass(parts.days);
+            return (
+              <div className="flex items-baseline justify-between gap-1 sm:gap-3">
+                <Unit label="Days" value={parts.days} size={size} days />
+                <Unit label="Hours" value={parts.hours} size={size} />
+                <Unit label="Min" value={parts.minutes} size={size} />
+                <Unit label="Sec" value={parts.seconds} size={size} />
+              </div>
+            );
+          })()}
         </motion.div>
       )}
     </motion.div>
   );
 }
 
-function daysSizeClass(value: number, big?: boolean) {
-  const digits = Math.abs(value).toString().length;
-  if (digits >= 4) return big ? "text-3xl sm:text-4xl" : "text-2xl sm:text-3xl";
-  if (digits === 3) return big ? "text-4xl sm:text-5xl" : "text-3xl sm:text-4xl";
-  return big ? "text-5xl sm:text-6xl" : "text-4xl sm:text-5xl";
+function cardSizeClass(days: number) {
+  const digits = Math.abs(days).toString().length;
+  if (digits >= 4) return "text-2xl sm:text-3xl";
+  if (digits === 3) return "text-3xl sm:text-4xl";
+  return "text-4xl sm:text-5xl";
 }
 
-function Unit({ label, value, big, days }: { label: string; value: number; big?: boolean; days?: boolean }) {
-  const size = days
-    ? daysSizeClass(value, big)
-    : big
-      ? "text-5xl sm:text-6xl"
-      : "text-3xl sm:text-4xl";
+function Unit({ label, value, size, days }: { label: string; value: number; size: string; days?: boolean }) {
   return (
     <div className="flex min-w-0 flex-1 flex-col items-center text-center">
       <div className={"font-bold tabular-nums tracking-tight text-zinc-50 " + size}>
