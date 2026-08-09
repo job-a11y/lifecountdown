@@ -17,6 +17,7 @@ import {
 import { CountdownCard } from "./CountdownCard";
 import { AddEditDialog } from "./AddEditDialog";
 import { FullscreenView } from "./FullscreenView";
+import { SalaryDock } from "./SalaryDock";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -222,7 +223,7 @@ export function Dashboard({ user }: { user: User }) {
 
       <main
         className="relative mx-auto w-full max-w-6xl px-4 pb-24 sm:px-8"
-        style={{ paddingBottom: "calc(6rem + env(safe-area-inset-bottom))" }}
+        style={{ paddingBottom: "calc(13rem + env(safe-area-inset-bottom))" }}
       >
         {loading ? (
           <div className="flex items-center justify-center py-32 text-zinc-500">
@@ -261,6 +262,8 @@ export function Dashboard({ user }: { user: User }) {
         editing={editing}
         onSubmit={handleSubmit}
       />
+
+      <SalaryDock user={user} />
 
       <AnimatePresence>
         {focused && (

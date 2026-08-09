@@ -44,6 +44,42 @@ export type Database = {
         }
         Relationships: []
       }
+      salary_settings: {
+        Row: {
+          created_at: string
+          currency: string
+          hours_per_week: number
+          monthly_net: number
+          updated_at: string
+          user_id: string
+          work_end: string
+          work_start: string
+          workdays: number[]
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          hours_per_week?: number
+          monthly_net?: number
+          updated_at?: string
+          user_id: string
+          work_end?: string
+          work_start?: string
+          workdays?: number[]
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          hours_per_week?: number
+          monthly_net?: number
+          updated_at?: string
+          user_id?: string
+          work_end?: string
+          work_start?: string
+          workdays?: number[]
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
