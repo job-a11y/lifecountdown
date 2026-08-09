@@ -91,6 +91,10 @@ export function SalaryDock({ user }: { user: User }) {
               <span className="font-medium tabular-nums text-zinc-300">
                 {formatMoney(state.earned247, settings.currency)}
               </span>
+              <span className="text-zinc-600"> · </span>
+              <span className="tabular-nums text-zinc-500">
+                {formatMoney(state.perSecond247 * 3600, settings.currency)}/h
+              </span>
             </p>
             <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-white/10">
               <div
