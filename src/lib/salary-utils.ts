@@ -39,6 +39,9 @@ export interface SalaryState {
   working: boolean;
   progress: number;
   perSecond: number;
+  earned247: number;
+  perSecond247: number;
+  progress247: number;
 }
 
 export function computeSalary(s: SalarySettings, nowMs: number): SalaryState {
@@ -73,12 +76,23 @@ export function computeSalary(s: SalarySettings, nowMs: number): SalaryState {
   }
 
   const earned = Math.min(s.monthly_net, workedSec * perSecond);
+
+  // Continuous 24/7 accrual across all calendar seconds of the month
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const monthCalendarSec = daysInMonth * 24 * 3600;
+  const perSecond247 = monthCalendarSec > 0 ? s.monthly_net / monthCalendarSec : 0;
+  const elapsedSec = (nowMs - new Date(year, month, 1, 0, 0, 0, 0).getTime()) / 1000;
+  const earned247 = Math.min(s.monthly_net, Math.max(0, elapsedSec) * perSecond247);
+
   return {
     earned,
     monthTotal: s.monthly_net,
     working,
     progress: s.monthly_net > 0 ? earned / s.monthly_net : 0,
     perSecond,
+    earned247,
+    perSecond247,
+    progress247: s.monthly_net > 0 ? earned247 / s.monthly_net : 0,
   };
 }
 
