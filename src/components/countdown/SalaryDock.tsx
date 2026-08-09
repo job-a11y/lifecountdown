@@ -86,6 +86,12 @@ export function SalaryDock({ user }: { user: User }) {
             <div className={"mt-1 truncate font-bold tabular-nums tracking-tight text-zinc-50 " + size}>
               {amount}
             </div>
+            <p className="mt-1 truncate text-xs text-zinc-400 sm:text-sm">
+              <span className="text-zinc-500">24/7 pace</span>{" "}
+              <span className="font-medium tabular-nums text-zinc-300">
+                {formatMoney(state.earned247, settings.currency)}
+              </span>
+            </p>
             <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-white/10">
               <div
                 className="h-full rounded-full bg-emerald-400/80 transition-[width] duration-1000 ease-linear"
