@@ -78,37 +78,36 @@ export function SalarySettingsDialog({ open, onOpenChange, settings, onSave }: P
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
+          <div className="grid grid-cols-3 gap-2">
+            <div className="min-w-0 space-y-1.5">
               <Label className="text-xs text-zinc-400">Work starts</Label>
               <Input type="time" value={start} onChange={(e) => setStart(e.target.value)} className="rounded-xl border-white/10 bg-white/5" />
             </div>
-            <div className="space-y-1.5">
+            <div className="min-w-0 space-y-1.5">
               <Label className="text-xs text-zinc-400">Work ends</Label>
               <Input type="time" value={end} onChange={(e) => setEnd(e.target.value)} className="rounded-xl border-white/10 bg-white/5" />
             </div>
-          </div>
-
-          <div className="space-y-1.5">
-            <Label className="text-xs text-zinc-400">Work hours per week</Label>
-            <Input
-              inputMode="decimal"
-              value={hours}
-              onChange={(e) => setHours(e.target.value)}
-              className="rounded-xl border-white/10 bg-white/5"
-            />
+            <div className="min-w-0 space-y-1.5">
+              <Label className="text-xs text-zinc-400">Work hours per week</Label>
+              <Input
+                inputMode="decimal"
+                value={hours}
+                onChange={(e) => setHours(e.target.value)}
+                className="rounded-xl border-white/10 bg-white/5"
+              />
+            </div>
           </div>
 
           <div className="space-y-2">
             <Label className="text-xs text-zinc-400">Active workdays</Label>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="grid grid-cols-7 gap-1.5">
               {DAY_LABELS.map((label, i) => (
                 <button
                   key={label}
                   type="button"
                   onClick={() => toggleDay(i)}
                   className={
-                    "h-10 min-w-11 rounded-full border px-3 text-xs font-medium transition " +
+                    "h-10 min-w-0 w-full rounded-full border px-0 text-xs font-medium transition " +
                     (days.includes(i)
                       ? "border-transparent bg-white text-black"
                       : "border-white/10 bg-white/5 text-zinc-400 hover:bg-white/10")
