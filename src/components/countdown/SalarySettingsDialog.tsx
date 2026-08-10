@@ -88,7 +88,7 @@ export function SalarySettingsDialog({ open, onOpenChange, settings, onSave }: P
               <Input type="time" value={end} onChange={(e) => setEnd(e.target.value)} className="rounded-xl border-white/10 bg-white/5" />
             </div>
             <div className="min-w-0 space-y-1.5">
-              <Label className="text-xs text-zinc-400">Work hours per week</Label>
+              <Label className="text-xs text-zinc-400">Hours/week</Label>
               <Input
                 inputMode="decimal"
                 value={hours}
