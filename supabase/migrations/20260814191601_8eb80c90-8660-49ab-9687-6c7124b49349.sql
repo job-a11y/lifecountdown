@@ -1,0 +1,1 @@
+ALTER TABLE public.countdowns ADD COLUMN IF NOT EXISTS show_elapsed_time boolean NOT NULL DEFAULT false;
