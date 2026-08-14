@@ -132,7 +132,7 @@ export function Dashboard({ user }: { user: User }) {
     [countdowns, focusedId],
   );
 
-  async function handleSubmit(data: { title: string; target_at: string; accent: AccentKey }) {
+  async function handleSubmit(data: { title: string; target_at: string; accent: AccentKey; show_elapsed_time: boolean }) {
     if (editing) {
       const { error } = await supabase.from("countdowns").update(data).eq("id", editing.id);
       if (error) { toast.error(error.message); return; }
@@ -238,6 +238,7 @@ export function Dashboard({ user }: { user: User }) {
                 key={cd.id}
                 cd={cd}
                 parts={diffParts(cd.target_at, now)}
+                now={now}
                 view={view}
                 pulsing={pulsing.has(cd.id)}
                 onOpen={() => setFocusedId(cd.id)}
@@ -270,6 +271,7 @@ export function Dashboard({ user }: { user: User }) {
           <FullscreenView
             cd={focused}
             parts={diffParts(focused.target_at, now)}
+            now={now}
             onClose={() => setFocusedId(null)}
           />
         )}

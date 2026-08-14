@@ -18,6 +18,7 @@ export interface Countdown {
   title: string;
   target_at: string;
   accent: string;
+  show_elapsed_time?: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -50,6 +51,20 @@ export function diffParts(targetIso: string, nowMs: number): TimeParts {
 
 export function pad(n: number, len = 2) {
   return n.toString().padStart(len, "0");
+}
+
+export interface ElapsedInfo {
+  elapsedDays: number;
+  progressPercentage: number;
+}
+
+export function elapsedInfo(createdAtIso: string, targetIso: string, nowMs: number): ElapsedInfo {
+  const created = new Date(createdAtIso).getTime();
+  const target = new Date(targetIso).getTime();
+  const total = target - created;
+  const elapsed = Math.max(0, nowMs - created);
+  const pct = total > 0 ? Math.min(100, Math.max(0, Math.round((elapsed / total) * 100))) : 100;
+  return { elapsedDays: Math.floor(elapsed / 86400000), progressPercentage: pct };
 }
 
 export function formatTarget(iso: string) {

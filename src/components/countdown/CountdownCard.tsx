@@ -1,11 +1,12 @@
 import { motion } from "framer-motion";
 import { MoreHorizontal, Pencil, Trash2, Maximize2 } from "lucide-react";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { type Countdown, type TimeParts, formatTarget, getAccent, pad } from "@/lib/countdown-utils";
+import { type Countdown, type TimeParts, elapsedInfo, formatTarget, getAccent, pad } from "@/lib/countdown-utils";
 
 interface Props {
   cd: Countdown;
   parts: TimeParts;
+  now: number;
   view: "grid" | "list";
   pulsing: boolean;
   onOpen: () => void;
@@ -14,8 +15,9 @@ interface Props {
   onDismissPulse: () => void;
 }
 
-export function CountdownCard({ cd, parts, view, pulsing, onOpen, onEdit, onDelete, onDismissPulse }: Props) {
+export function CountdownCard({ cd, parts, now, view, pulsing, onOpen, onEdit, onDelete, onDismissPulse }: Props) {
   const accent = getAccent(cd.accent);
+  const elapsed = cd.show_elapsed_time ? elapsedInfo(cd.created_at, cd.target_at, now) : null;
 
   return (
     <motion.div
@@ -43,6 +45,11 @@ export function CountdownCard({ cd, parts, view, pulsing, onOpen, onEdit, onDele
         <div className="min-w-0 flex-1">
           <h3 className="truncate text-lg font-semibold text-zinc-100">{cd.title}</h3>
           <p className="mt-1 text-xs text-zinc-400">Target: {formatTarget(cd.target_at)}</p>
+          {elapsed && (
+            <span className="mt-0.5 block text-xs text-zinc-400 tabular-nums">
+              Elapsed: {elapsed.elapsedDays} days ({elapsed.progressPercentage}%)
+            </span>
+          )}
         </div>
         <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
           <button

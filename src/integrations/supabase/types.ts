@@ -19,6 +19,7 @@ export type Database = {
           accent: string
           created_at: string
           id: string
+          show_elapsed_time: boolean
           target_at: string
           title: string
           updated_at: string
@@ -28,6 +29,7 @@ export type Database = {
           accent?: string
           created_at?: string
           id?: string
+          show_elapsed_time?: boolean
           target_at: string
           title: string
           updated_at?: string
@@ -37,6 +39,7 @@ export type Database = {
           accent?: string
           created_at?: string
           id?: string
+          show_elapsed_time?: boolean
           target_at?: string
           title?: string
           updated_at?: string

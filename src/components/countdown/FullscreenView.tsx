@@ -1,15 +1,17 @@
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
-import { type Countdown, type TimeParts, formatTarget, getAccent, pad } from "@/lib/countdown-utils";
+import { type Countdown, type TimeParts, elapsedInfo, formatTarget, getAccent, pad } from "@/lib/countdown-utils";
 
 interface Props {
   cd: Countdown;
   parts: TimeParts;
+  now: number;
   onClose: () => void;
 }
 
-export function FullscreenView({ cd, parts, onClose }: Props) {
+export function FullscreenView({ cd, parts, now, onClose }: Props) {
   const accent = getAccent(cd.accent);
+  const elapsed = cd.show_elapsed_time ? elapsedInfo(cd.created_at, cd.target_at, now) : null;
   return (
     <motion.div
       layoutId={`card-${cd.id}`}
@@ -46,6 +48,11 @@ export function FullscreenView({ cd, parts, onClose }: Props) {
           {cd.title}
         </motion.h2>
         <p className="mt-2 text-sm text-zinc-400">Target: {formatTarget(cd.target_at)}</p>
+        {elapsed && (
+          <span className="mt-0.5 block text-xs text-zinc-400 tabular-nums">
+            Elapsed: {elapsed.elapsedDays} days ({elapsed.progressPercentage}%)
+          </span>
+        )}
 
         <motion.div layoutId={`digits-${cd.id}`} className="mt-12 w-full max-w-4xl">
           {parts.reached ? (
