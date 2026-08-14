@@ -4,19 +4,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { ACCENTS, type AccentKey, type Countdown, toDatetimeLocal } from "@/lib/countdown-utils";
+import { Switch } from "@/components/ui/switch";
 import { Check } from "lucide-react";
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   editing?: Countdown | null;
-  onSubmit: (data: { title: string; target_at: string; accent: AccentKey }) => Promise<void> | void;
+  onSubmit: (data: { title: string; target_at: string; accent: AccentKey; show_elapsed_time: boolean }) => Promise<void> | void;
 }
 
 export function AddEditDialog({ open, onOpenChange, editing, onSubmit }: Props) {
   const [title, setTitle] = useState("");
   const [targetLocal, setTargetLocal] = useState("");
   const [accent, setAccent] = useState<AccentKey>("blue");
+  const [showElapsed, setShowElapsed] = useState(false);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -25,12 +27,14 @@ export function AddEditDialog({ open, onOpenChange, editing, onSubmit }: Props) 
         setTitle(editing.title);
         setTargetLocal(toDatetimeLocal(editing.target_at));
         setAccent((editing.accent as AccentKey) in ACCENTS ? (editing.accent as AccentKey) : "blue");
+        setShowElapsed(Boolean(editing.show_elapsed_time));
       } else {
         setTitle("");
         const d = new Date(Date.now() + 7 * 86400_000);
         d.setSeconds(0, 0);
         setTargetLocal(toDatetimeLocal(d.toISOString()));
         setAccent("blue");
+        setShowElapsed(false);
       }
     }
   }, [open, editing]);
@@ -41,7 +45,7 @@ export function AddEditDialog({ open, onOpenChange, editing, onSubmit }: Props) 
     setSaving(true);
     try {
       const iso = new Date(targetLocal).toISOString();
-      await onSubmit({ title: title.trim(), target_at: iso, accent });
+      await onSubmit({ title: title.trim(), target_at: iso, accent, show_elapsed_time: showElapsed });
       onOpenChange(false);
     } finally {
       setSaving(false);
@@ -89,6 +93,13 @@ export function AddEditDialog({ open, onOpenChange, editing, onSubmit }: Props) 
                 </button>
               ))}
             </div>
+          </div>
+
+          <div className="flex items-center justify-between gap-3">
+            <Label htmlFor="cd-elapsed" className="text-xs uppercase tracking-wider text-zinc-400">
+              Show elapsed time
+            </Label>
+            <Switch id="cd-elapsed" checked={showElapsed} onCheckedChange={setShowElapsed} />
           </div>
 
           <DialogFooter className="pt-2 gap-2">
