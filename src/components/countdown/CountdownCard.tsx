@@ -27,7 +27,7 @@ export function CountdownCard({ cd, parts, now, view, pulsing, onOpen, onEdit, o
       transition={{ type: "spring", stiffness: 300, damping: 26 }}
       className={
         "group relative cursor-pointer overflow-hidden rounded-3xl border bg-white/5 backdrop-blur-xl transition-shadow " +
-        (view === "list" ? "p-7 sm:p-8" : "p-6") +
+        (view === "list" ? "p-4 sm:p-5" : "p-6 sm:p-7") +
         (pulsing ? " animate-pulse" : "")
       }
       style={{
@@ -80,7 +80,7 @@ export function CountdownCard({ cd, parts, now, view, pulsing, onOpen, onEdit, o
       {parts.reached ? (
         <motion.div layoutId={`digits-${cd.id}`} className="relative">
           <div
-            className={"font-semibold tracking-tight " + (view === "list" ? "text-5xl sm:text-6xl" : "text-4xl")}
+            className={"font-semibold tracking-tight " + (view === "list" ? "text-3xl sm:text-4xl" : "text-4xl sm:text-5xl")}
             style={{ color: accent.hex }}
           >
             Event Reached!
@@ -92,7 +92,7 @@ export function CountdownCard({ cd, parts, now, view, pulsing, onOpen, onEdit, o
       ) : (
         <motion.div layoutId={`digits-${cd.id}`} className="relative">
           {(() => {
-            const size = cardSizeClass(parts.days);
+            const size = cardSizeClass(parts.days, view);
             return (
               <div className="flex items-baseline justify-between gap-1 sm:gap-3">
                 <Unit label="Days" value={parts.days} size={size} days />
@@ -108,11 +108,12 @@ export function CountdownCard({ cd, parts, now, view, pulsing, onOpen, onEdit, o
   );
 }
 
-function cardSizeClass(days: number) {
+function cardSizeClass(days: number, view: "grid" | "list") {
   const digits = Math.abs(days).toString().length;
-  if (digits >= 4) return "text-2xl sm:text-3xl";
-  if (digits === 3) return "text-3xl sm:text-4xl";
-  return "text-4xl sm:text-5xl";
+  const list = view === "list";
+  if (digits >= 4) return list ? "text-xl sm:text-2xl" : "text-2xl sm:text-3xl";
+  if (digits === 3) return list ? "text-2xl sm:text-3xl" : "text-3xl sm:text-4xl";
+  return list ? "text-3xl sm:text-4xl" : "text-4xl sm:text-5xl";
 }
 
 function Unit({ label, value, size, days }: { label: string; value: number; size: string; days?: boolean }) {

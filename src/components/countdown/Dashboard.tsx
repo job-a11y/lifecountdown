@@ -232,7 +232,7 @@ export function Dashboard({ user }: { user: User }) {
         ) : countdowns.length === 0 ? (
           <EmptyState onCreate={() => { setEditing(null); setDialogOpen(true); }} />
         ) : (
-          <div className={view === "grid" ? "grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5" : "flex flex-col gap-5"}>
+          <div className={view === "grid" ? "grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5" : "flex flex-col gap-3"}>
             {countdowns.map((cd) => (
               <CountdownCard
                 key={cd.id}
