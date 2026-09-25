@@ -27,8 +27,7 @@ export function CountdownCard({ cd, parts, now, view, pulsing, onOpen, onEdit, o
       transition={{ type: "spring", stiffness: 300, damping: 26 }}
       className={
         "group relative cursor-pointer overflow-hidden rounded-3xl border bg-white/5 backdrop-blur-xl transition-shadow " +
-        (view === "list" ? "p-4 sm:p-5" : "p-6 sm:p-7") +
-        (pulsing ? " animate-pulse" : "")
+        (view === "list" ? "p-4 sm:p-5" : "p-6 sm:p-7")
       }
       style={{
         borderColor: `rgba(${accent.rgb}, 0.35)`,
@@ -43,7 +42,18 @@ export function CountdownCard({ cd, parts, now, view, pulsing, onOpen, onEdit, o
 
       <motion.div layoutId={`header-${cd.id}`} className="relative flex items-start justify-between gap-3 mb-4">
         <div className="min-w-0 flex-1">
-          <h3 className="truncate text-lg font-semibold text-zinc-100">{cd.title}</h3>
+          <h3 className="flex items-center gap-1.5 truncate text-lg font-semibold text-zinc-100">
+            <span className="truncate">{cd.title}</span>
+            {parts.reached && (
+              <motion.span
+                animate={pulsing ? { scale: [1, 1.18, 1], opacity: [1, 0.65, 1] } : { scale: 1, opacity: 1 }}
+                transition={pulsing ? { duration: 1.4, repeat: Infinity, ease: "easeInOut" } : { duration: 0.25 }}
+                className="inline-flex shrink-0"
+              >
+                <CheckCircle2 className="h-4 w-4" style={{ color: "#30D158" }} />
+              </motion.span>
+            )}
+          </h3>
           <p className="mt-1 text-xs text-zinc-400">Target: {formatTarget(cd.target_at)}</p>
           {elapsed && (
             <span className="mt-0.5 block text-xs text-zinc-400 tabular-nums">
@@ -77,19 +87,7 @@ export function CountdownCard({ cd, parts, now, view, pulsing, onOpen, onEdit, o
         </div>
       </motion.div>
 
-      {parts.reached ? (
-        <motion.div layoutId={`digits-${cd.id}`} className="relative">
-          <div
-            className={"font-semibold tracking-tight " + (view === "list" ? "text-3xl sm:text-4xl" : "text-4xl sm:text-5xl")}
-            style={{ color: accent.hex }}
-          >
-            Event Reached!
-          </div>
-          {pulsing && (
-            <p className="mt-2 text-xs text-zinc-400">Tap card to dismiss glow</p>
-          )}
-        </motion.div>
-      ) : (
+      {!parts.reached && (
         <motion.div layoutId={`digits-${cd.id}`} className="relative">
           {(() => {
             const size = cardSizeClass(parts.days, view);

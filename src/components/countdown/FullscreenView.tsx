@@ -56,8 +56,13 @@ export function FullscreenView({ cd, parts, now, onClose }: Props) {
 
         <motion.div layoutId={`digits-${cd.id}`} className="mt-12 w-full max-w-4xl">
           {parts.reached ? (
-            <div className="text-6xl sm:text-8xl font-semibold" style={{ color: accent.hex }}>
-              Event Reached!
+            <div className="flex flex-col items-center">
+              <CheckCircle2
+                className="h-24 w-24 sm:h-32 sm:w-32"
+                strokeWidth={1.25}
+                style={{ color: "#30D158" }}
+              />
+              <p className="mt-5 text-xs sm:text-sm uppercase tracking-[0.2em] text-zinc-400">Reached</p>
             </div>
           ) : (
             <div className="flex items-baseline justify-between gap-1 sm:gap-3">
