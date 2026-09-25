@@ -58,14 +58,15 @@ export function computeSalary(s: SalarySettings, nowMs: number): SalaryState {
   const perDayFromWeek = weeklySec / workdays.length;
   const dailySec = Math.min(windowSec, perDayFromWeek) || 0;
 
-  const workdayCount = countWorkdaysInMonth(year, month, workdays);
+  const workdayCount = countWorkdaysInRange(periodStart, periodEnd, workdays);
   const monthSec = dailySec * workdayCount;
   const perSecond = monthSec > 0 ? s.monthly_net / monthSec : 0;
 
-  // seconds worked so far this month
+  // seconds worked so far this salary period
   let workedSec = 0;
-  for (let d = 1; d < now.getDate(); d++) {
-    if (workdays.includes(new Date(year, month, d).getDay())) workedSec += dailySec;
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  for (const d = new Date(periodStart); d < today; d.setDate(d.getDate() + 1)) {
+    if (workdays.includes(d.getDay())) workedSec += dailySec;
   }
   let working = false;
   if (workdays.includes(now.getDay())) {
