@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { X } from "lucide-react";
+import { X, CheckCircle2 } from "lucide-react";
 import { type Countdown, type TimeParts, elapsedInfo, formatTarget, getAccent, pad } from "@/lib/countdown-utils";
 
 interface Props {

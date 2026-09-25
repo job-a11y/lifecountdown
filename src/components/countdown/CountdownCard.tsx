@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { MoreHorizontal, Pencil, Trash2, Maximize2 } from "lucide-react";
+import { MoreHorizontal, Pencil, Trash2, Maximize2, CheckCircle2 } from "lucide-react";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { type Countdown, type TimeParts, elapsedInfo, formatTarget, getAccent, pad } from "@/lib/countdown-utils";
 
