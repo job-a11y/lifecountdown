@@ -24,11 +24,10 @@ export function toMinutes(hhmm: string) {
   return (isNaN(h) ? 0 : h) * 60 + (isNaN(m) ? 0 : m);
 }
 
-function countWorkdaysInMonth(year: number, month: number, workdays: number[]) {
-  const days = new Date(year, month + 1, 0).getDate();
+function countWorkdaysInRange(start: Date, end: Date, workdays: number[]) {
   let n = 0;
-  for (let d = 1; d <= days; d++) {
-    if (workdays.includes(new Date(year, month, d).getDay())) n++;
+  for (const d = new Date(start); d < end; d.setDate(d.getDate() + 1)) {
+    if (workdays.includes(d.getDay())) n++;
   }
   return n;
 }
@@ -46,8 +45,10 @@ export interface SalaryState {
 
 export function computeSalary(s: SalarySettings, nowMs: number): SalaryState {
   const now = new Date(nowMs);
-  const year = now.getFullYear();
-  const month = now.getMonth();
+  const periodStart = now.getDate() >= 25
+    ? new Date(now.getFullYear(), now.getMonth(), 25, 0, 0, 0, 0)
+    : new Date(now.getFullYear(), now.getMonth() - 1, 25, 0, 0, 0, 0);
+  const periodEnd = new Date(periodStart.getFullYear(), periodStart.getMonth() + 1, 25, 0, 0, 0, 0);
   const workdays = s.workdays.length ? s.workdays : DEFAULT_SALARY.workdays;
 
   const startMin = toMinutes(s.work_start);
