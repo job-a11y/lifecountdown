@@ -79,11 +79,10 @@ export function computeSalary(s: SalarySettings, nowMs: number): SalaryState {
 
   const earned = Math.min(s.monthly_net, workedSec * perSecond);
 
-  // Continuous 24/7 accrual across all calendar seconds of the month
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const monthCalendarSec = daysInMonth * 24 * 3600;
-  const perSecond247 = monthCalendarSec > 0 ? s.monthly_net / monthCalendarSec : 0;
-  const elapsedSec = (nowMs - new Date(year, month, 1, 0, 0, 0, 0).getTime()) / 1000;
+  // Continuous 24/7 accrual across all calendar seconds of the salary period
+  const periodCalendarSec = (periodEnd.getTime() - periodStart.getTime()) / 1000;
+  const perSecond247 = periodCalendarSec > 0 ? s.monthly_net / periodCalendarSec : 0;
+  const elapsedSec = (nowMs - periodStart.getTime()) / 1000;
   const earned247 = Math.min(s.monthly_net, Math.max(0, elapsedSec) * perSecond247);
 
   return {
